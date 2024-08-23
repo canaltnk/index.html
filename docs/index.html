@@ -33,6 +33,14 @@
         #skor {
             text-align: center;
             font-size: 24px;
+            #zorluk {
+        text-align: center;
+        margin-top: 10px;
+    }
+    #zorluk button {
+        margin: 0 5px;
+        padding: 5px 10px;
+    }
         }
     </style>
 </head>
@@ -46,6 +54,11 @@
         </div>
     </div>
     <div id="skor">Skor: 0</div>
+    <div id="zorluk">
+        <button onclick="zorlukAyarla('kolay')">Kolay</button>
+        <button onclick="zorlukAyarla('orta')">Orta</button>
+        <button onclick="zorlukAyarla('zor')">Zor</button>
+    </div>
 
     <script>
         const oyunAlani = document.getElementById('oyunAlani');
@@ -103,6 +116,59 @@ function topOlustur() {
         });
 
         setInterval(topOlustur, 1000);
+        
+    // ... mevcut değişkenler ...
+    let zorluk = 'orta';
+    let topHizi = 2;
+    let topOlusturmaSuresi = 1000;
+    let karakterGenisligi = 60;
+
+    function zorlukAyarla(yeniZorluk) {
+        zorluk = yeniZorluk;
+        switch(zorluk) {
+            case 'kolay':
+                topHizi = 1;
+                topOlusturmaSuresi = 1500;
+                karakterGenisligi = 80;
+                break;
+            case 'orta':
+                topHizi = 2;
+                topOlusturmaSuresi = 1000;
+                karakterGenisligi = 60;
+                break;
+            case 'zor':
+                topHizi = 3;
+                topOlusturmaSuresi = 750;
+                karakterGenisligi = 40;
+                break;
+        }
+        karakter.style.width = karakterGenisligi + 'px';
+        clearInterval(topOlusturmaInterval);
+        topOlusturmaInterval = setInterval(topOlustur, topOlusturmaSuresi);
+    }
+
+    function topOlustur() {
+        const top = document.createElement('div');
+        top.classList.add('top');
+        top.style.left = Math.random() * (oyunAlani.offsetWidth - 20) + 'px';
+        top.style.top = '0px';
+        oyunAlani.appendChild(top);
+
+        let topPozisyon = 0;
+        const topDusur = setInterval(() => {
+            topPozisyon += topHizi;
+            top.style.top = topPozisyon + 'px';
+
+            // ... mevcut çarpışma kontrolü ...
+
+        }, 20);
+    }
+
+    // ... mevcut event listener'lar ...
+
+    let topOlusturmaInterval = setInterval(topOlustur, topOlusturmaSuresi);
+
     </script>
+    
 </body>
 </html>
